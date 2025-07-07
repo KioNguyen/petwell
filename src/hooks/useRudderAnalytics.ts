@@ -45,7 +45,10 @@ const useRudderStackAnalytics = ():
             return undefined;
           }
 
-          const { RudderAnalytics } = await import("@rudderstack/analytics-js");
+          // Need to use bundled version for browser compatibility and plugins support
+          const { RudderAnalytics } = await import(
+            "@rudderstack/analytics-js/bundled"
+          );
           const analyticsInstance = new RudderAnalytics();
 
           analyticsInstance.load(writeKey, dataplaneUrl, {
