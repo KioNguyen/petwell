@@ -1,6 +1,9 @@
-import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+
+import { Geist, Geist_Mono } from "next/font/google";
+
+import type { Metadata } from "next";
+import Script from "next/script";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -24,6 +27,38 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        <Script id="bufferEvents">
+          {`
+            window.rudderanalytics = [];
+            var methods = [
+              'setDefaultInstanceKey',
+              'load',
+              'ready',
+              'page',
+              'track',
+              'identify',
+              'alias',
+              'group',
+              'reset',
+              'setAnonymousId',
+              'startSession',
+              'endSession',
+              'consent'
+            ];
+            for (var i = 0; i < methods.length; i++) {
+              var method = methods[i];
+              window.rudderanalytics[method] = (function (methodName) {
+                return function () {
+                  window.rudderanalytics.push([methodName].concat(Array.prototype.slice.call(arguments)));
+                };
+              })(method);
+            }
+            // Below line is only for demonstration purpose, SPA code is better place for auto page call
+            window.rudderanalytics.page('sample page call');
+        `}
+        </Script>
+      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
